@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/*.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "now-node@20.x"
     }
   },
   "rewrites": [
@@ -19,4 +19,3 @@
     }
   ]
 }
-
