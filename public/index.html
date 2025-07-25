@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annual Income Calculator Toolkit</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <i class="fas fa-calculator"></i>
+                    Annual Income Calculator Toolkit
+                </h1>
+                <p class="subtitle">Comprehensive income and tax calculation tools for 2025</p>
+            </div>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="income-calc">
+                <i class="fas fa-money-bill-wave"></i>
+                Income Calculator
+            </button>
+            <button class="tab-btn" data-tab="tax-calc">
+                <i class="fas fa-receipt"></i>
+                Tax Calculator
+            </button>
+            <button class="tab-btn" data-tab="compare">
+                <i class="fas fa-chart-bar"></i>
+                Compare Scenarios
+            </button>
+            <button class="tab-btn" data-tab="brackets">
+                <i class="fas fa-table"></i>
+                Tax Brackets
+            </button>
+        </nav>
+
+        <main class="main-content">
+            <!-- Income Calculator Tab -->
+            <div class="tab-content active" id="income-calc">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-calculator"></i> Income Calculator</h2>
+                        <p>Convert between different income periods and calculate annual earnings</p>
+                    </div>
+                    <div class="card-body">
+                        <form id="income-form" class="form">
+                            <div class="form-group">
+                                <label for="income-type">Income Type</label>
+                                <select id="income-type" name="income_type" required>
+                                    <option value="annual">Annual Salary</option>
+                                    <option value="monthly">Monthly Salary</option>
+                                    <option value="weekly">Weekly Wage</option>
+                                    <option value="biweekly">Bi-weekly Wage</option>
+                                    <option value="hourly">Hourly Rate</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="amount">Amount ($)</label>
+                                <input type="number" id="amount" name="amount" step="0.01" min="0" required>
+                            </div>
+                            
+                            <div class="hourly-fields" style="display: none;">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="hours-per-week">Hours per Week</label>
+                                        <input type="number" id="hours-per-week" name="hours_per_week" value="40" min="1" max="168">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="weeks-per-year">Weeks per Year</label>
+                                        <input type="number" id="weeks-per-year" name="weeks_per_year" value="52" min="1" max="52">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-calculator"></i>
+                                Calculate Income
+                            </button>
+                        </form>
+                        
+                        <div id="income-results" class="results" style="display: none;">
+                            <h3>Income Breakdown</h3>
+                            <div class="results-grid">
+                                <div class="result-item">
+                                    <span class="result-label">Annual Income</span>
+                                    <span class="result-value" id="annual-income">$0</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">Monthly Income</span>
+                                    <span class="result-value" id="monthly-income">$0</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">Weekly Income</span>
+                                    <span class="result-value" id="weekly-income">$0</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">Bi-weekly Income</span>
+                                    <span class="result-value" id="biweekly-income">$0</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">Hourly Equivalent</span>
+                                    <span class="result-value" id="hourly-equivalent">$0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tax Calculator Tab -->
+            <div class="tab-content" id="tax-calc">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-receipt"></i> Tax Calculator</h2>
+                        <p>Calculate federal, state, and FICA taxes with detailed breakdown</p>
+                    </div>
+                    <div class="card-body">
+                        <form id="tax-form" class="form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="gross-income">Annual Gross Income ($)</label>
+                                    <input type="number" id="gross-income" name="gross_income" step="0.01" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="filing-status">Filing Status</label>
+                                    <select id="filing-status" name="filing_status" required>
+                                        <option value="single">Single</option>
+                                        <option value="married_jointly">Married Filing Jointly</option>
+                                        <option value="married_separately">Married Filing Separately</option>
+                                        <option value="head_of_household">Head of Household</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="pre-tax-deductions">Pre-tax Deductions ($)</label>
+                                    <input type="number" id="pre-tax-deductions" name="pre_tax_deductions" step="0.01" min="0" value="0">
+                                    <small>401k, health insurance, etc.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="additional-deductions">Additional Deductions ($)</label>
+                                    <input type="number" id="additional-deductions" name="additional_deductions" step="0.01" min="0" value="0">
+                                    <small>Itemized deductions above standard</small>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="state-tax-rate">State Tax Rate (%)</label>
+                                <input type="number" id="state-tax-rate" name="state_tax_rate" step="0.01" min="0" max="15" value="0">
+                                <small>Enter your state's income tax rate</small>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-calculator"></i>
+                                Calculate Taxes
+                            </button>
+                        </form>
+                        
+                        <div id="tax-results" class="results" style="display: none;">
+                            <h3>Tax Breakdown</h3>
+                            <div class="tax-summary">
+                                <div class="summary-item gross">
+                                    <span class="summary-label">Gross Income</span>
+                                    <span class="summary-value" id="tax-gross-income">$0</span>
+                                </div>
+                                <div class="summary-item taxes">
+                                    <span class="summary-label">Total Taxes</span>
+                                    <span class="summary-value" id="total-taxes">$0</span>
+                                </div>
+                                <div class="summary-item net">
+                                    <span class="summary-label">Net Income</span>
+                                    <span class="summary-value" id="net-income">$0</span>
+                                </div>
+                                <div class="summary-item rate">
+                                    <span class="summary-label">Effective Tax Rate</span>
+                                    <span class="summary-value" id="effective-rate">0%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="tax-details">
+                                <div class="detail-section">
+                                    <h4>Federal Taxes</h4>
+                                    <div class="detail-item">
+                                        <span>Federal Income Tax</span>
+                                        <span id="federal-tax">$0</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h4>FICA Taxes</h4>
+                                    <div class="detail-item">
+                                        <span>Social Security (6.2%)</span>
+                                        <span id="social-security">$0</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Medicare (1.45%+)</span>
+                                        <span id="medicare">$0</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h4>State & Other</h4>
+                                    <div class="detail-item">
+                                        <span>State Income Tax</span>
+                                        <span id="state-tax">$0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="net-income-breakdown">
+                                <h4>Take-Home Pay</h4>
+                                <div class="results-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">Monthly Net</span>
+                                        <span class="result-value" id="monthly-net">$0</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Weekly Net</span>
+                                        <span class="result-value" id="weekly-net">$0</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Bi-weekly Net</span>
+                                        <span class="result-value" id="biweekly-net">$0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compare Scenarios Tab -->
+            <div class="tab-content" id="compare">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-bar"></i> Compare Scenarios</h2>
+                        <p>Compare multiple income scenarios side by side</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="scenarios-container">
+                            <div class="scenario-inputs">
+                                <!-- Scenario 1 -->
+                                <div class="scenario-card" data-scenario="0">
+                                    <div class="scenario-header">
+                                        <h4>Scenario 1</h4>
+                                        <div class="scenario-name-group">
+                                            <label for="scenario-1-name">Scenario Name</label>
+                                            <input type="text" id="scenario-1-name" class="scenario-name" placeholder="e.g., Current Job" value="Current Job">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="scenario-form">
+                                        <div class="form-group">
+                                            <label for="scenario-1-income-type">Income Type</label>
+                                            <select id="scenario-1-income-type" class="scenario-income-type">
+                                                <option value="annual">Annual Salary</option>
+                                                <option value="monthly">Monthly Salary</option>
+                                                <option value="weekly">Weekly Wage</option>
+                                                <option value="biweekly">Bi-weekly Wage</option>
+                                                <option value="hourly">Hourly Rate</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="scenario-1-amount">Amount ($)</label>
+                                            <input type="number" id="scenario-1-amount" class="scenario-amount" placeholder="Enter amount" step="0.01" min="0">
+                                        </div>
+                                        
+                                        <div class="hourly-details" id="scenario-1-hourly" style="display: none;">
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label for="scenario-1-hours">Hours per Week</label>
+                                                    <input type="number" id="scenario-1-hours" class="scenario-hours" value="40" min="1" max="168">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="scenario-1-weeks">Weeks per Year</label>
+                                                    <input type="number" id="scenario-1-weeks" class="scenario-weeks" value="52" min="1" max="52">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="scenario-1-filing">Filing Status</label>
+                                            <select id="scenario-1-filing" class="scenario-filing-status">
+                                                <option value="single">Single</option>
+                                                <option value="married_jointly">Married Filing Jointly</option>
+                                                <option value="married_separately">Married Filing Separately</option>
+                                                <option value="head_of_household">Head of Household</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="scenario-1-pretax">Pre-tax Deductions ($)</label>
+                                                <input type="number" id="scenario-1-pretax" class="scenario-pretax" placeholder="0" step="0.01" min="0" value="0">
+                                                <small>401k, health insurance, etc.</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="scenario-1-state">State Tax Rate (%)</label>
+                                                <input type="number" id="scenario-1-state" class="scenario-state-rate" placeholder="0" step="0.01" min="0" max="15" value="0">
+                                                <small>Your state's income tax rate</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Scenario 2 -->
+                                <div class="scenario-card" data-scenario="1">
+                                    <div class="scenario-header">
+                                        <h4>Scenario 2</h4>
+                                        <div class="scenario-name-group">
+                                            <label for="scenario-2-name">Scenario Name</label>
+                                            <input type="text" id="scenario-2-name" class="scenario-name" placeholder="e.g., New Job Offer" value="New Opportunity">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="scenario-form">
+                                        <div class="form-group">
+                                            <label for="scenario-2-income-type">Income Type</label>
+                                            <select id="scenario-2-income-type" class="scenario-income-type">
+                                                <option value="annual">Annual Salary</option>
+                                                <option value="monthly">Monthly Salary</option>
+                                                <option value="weekly">Weekly Wage</option>
+                                                <option value="biweekly">Bi-weekly Wage</option>
+                                                <option value="hourly">Hourly Rate</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="scenario-2-amount">Amount ($)</label>
+                                            <input type="number" id="scenario-2-amount" class="scenario-amount" placeholder="Enter amount" step="0.01" min="0">
+                                        </div>
+                                        
+                                        <div class="hourly-details" id="scenario-2-hourly" style="display: none;">
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label for="scenario-2-hours">Hours per Week</label>
+                                                    <input type="number" id="scenario-2-hours" class="scenario-hours" value="40" min="1" max="168">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="scenario-2-weeks">Weeks per Year</label>
+                                                    <input type="number" id="scenario-2-weeks" class="scenario-weeks" value="52" min="1" max="52">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="scenario-2-filing">Filing Status</label>
+                                            <select id="scenario-2-filing" class="scenario-filing-status">
+                                                <option value="single">Single</option>
+                                                <option value="married_jointly">Married Filing Jointly</option>
+                                                <option value="married_separately">Married Filing Separately</option>
+                                                <option value="head_of_household">Head of Household</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="scenario-2-pretax">Pre-tax Deductions ($)</label>
+                                                <input type="number" id="scenario-2-pretax" class="scenario-pretax" placeholder="0" step="0.01" min="0" value="0">
+                                                <small>401k, health insurance, etc.</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="scenario-2-state">State Tax Rate (%)</label>
+                                                <input type="number" id="scenario-2-state" class="scenario-state-rate" placeholder="0" step="0.01" min="0" max="15" value="0">
+                                                <small>Your state's income tax rate</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="compare-button-container">
+                                <button id="compare-btn" class="btn btn-primary">
+                                    <i class="fas fa-chart-bar"></i>
+                                    Compare Scenarios
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="comparison-results" class="results" style="display: none;">
+                            <h3>Scenario Comparison</h3>
+                            <div class="comparison-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Metric</th>
+                                            <th id="scenario-1-header">Scenario 1</th>
+                                            <th id="scenario-2-header">Scenario 2</th>
+                                            <th>Difference</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Gross Income</td>
+                                            <td id="comp-gross-1">$0</td>
+                                            <td id="comp-gross-2">$0</td>
+                                            <td id="comp-gross-diff">$0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Net Income</td>
+                                            <td id="comp-net-1">$0</td>
+                                            <td id="comp-net-2">$0</td>
+                                            <td id="comp-net-diff">$0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Taxes</td>
+                                            <td id="comp-taxes-1">$0</td>
+                                            <td id="comp-taxes-2">$0</td>
+                                            <td id="comp-taxes-diff">$0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Effective Tax Rate</td>
+                                            <td id="comp-rate-1">0%</td>
+                                            <td id="comp-rate-2">0%</td>
+                                            <td id="comp-rate-diff">0%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Monthly Take-Home</td>
+                                            <td id="comp-monthly-1">$0</td>
+                                            <td id="comp-monthly-2">$0</td>
+                                            <td id="comp-monthly-diff">$0</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tax Brackets Tab -->
+            <div class="tab-content" id="brackets">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-table"></i> 2025 Tax Brackets</h2>
+                        <p>Current federal income tax brackets and standard deductions</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="brackets-container">
+                            <div class="bracket-section">
+                                <h3>Single Filers</h3>
+                                <div class="bracket-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Tax Rate</th>
+                                                <th>Income Range</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="single-brackets">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="bracket-section">
+                                <h3>Married Filing Jointly</h3>
+                                <div class="bracket-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Tax Rate</th>
+                                                <th>Income Range</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="married-brackets">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="deductions-info">
+                            <h3>2025 Standard Deductions</h3>
+                            <div class="deductions-grid">
+                                <div class="deduction-item">
+                                    <span class="deduction-label">Single</span>
+                                    <span class="deduction-value">$15,000</span>
+                                </div>
+                                <div class="deduction-item">
+                                    <span class="deduction-label">Married Filing Jointly</span>
+                                    <span class="deduction-value">$30,000</span>
+                                </div>
+                                <div class="deduction-item">
+                                    <span class="deduction-label">Married Filing Separately</span>
+                                    <span class="deduction-value">$15,000</span>
+                                </div>
+                                <div class="deduction-item">
+                                    <span class="deduction-label">Head of Household</span>
+                                    <span class="deduction-value">$22,500</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Annual Income Calculator Toolkit. Tax calculations are estimates for informational purposes only.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

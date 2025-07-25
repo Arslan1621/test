@@ -1,0 +1,19 @@
+{
+  "name": "income-calculator-vercel",
+  "version": "1.0.0",
+  "description": "Annual Income Calculator Toolkit - Vercel Compatible",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build complete'",
+    "start": "node api/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}
+
